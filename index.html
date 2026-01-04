@@ -229,7 +229,7 @@
   </article>
 </main>
 <footer class="footer">
-  <button class="button-save" type="button" onclick="window['popup-dialog'].showModal()">
+  <button class="button-save" type="button" onclick="console.log('Открываю попап'); window['popup-dialog'].showModal()">
     <svg class="save-icon" viewBox="0 0 39 39" width="21" height="21">
       <use href="./svg/save.svg#save--icon"></use>
     </svg>
@@ -243,12 +243,26 @@
       <p class="popup__text">Вставьте<br>дискету,&nbsp;чтобы<br>продолжить</p>
     </div>
     <div class="popup__button-container">
-      <button class="popup__close-button" type="button" onclick="window['popup-dialog'].close()">
+      <button class="popup__close-button" type="button" onclick="console.log('Закрываю попап'); window['popup-dialog'].close()">
         <span class="button__text">Ок</span>
       </button>
     </div>
   </dialog>
 </footer>
+<script>
+  // Защита от скрытых reload-ов
+  const originalReload = window.location.reload;
+  window.location.reload = function(...args) {
+    console.trace('Попытка location.reload() — запрещено тестом!');
+    // originalReload.apply(this, args);  // закомментировано — не даём перезагрузиться
+  };
+
+  window.addEventListener('beforeunload', (e) => {
+    console.trace('Попытка перезагрузки страницы (beforeunload)!');
+    // e.preventDefault();
+    // e.returnValue = 'Есть несохранённые изменения';
+  });
+</script>
 <script src="./scripts/like.js"></script>
 </body>
 </html>
